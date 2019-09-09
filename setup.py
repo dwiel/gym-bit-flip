@@ -13,7 +13,7 @@ requirements = [str(ir.req) for ir in install_requirements]
 
 setup(
     name='gym_bit_flip',
-    version='0.0.4',
+    version='0.0.7',
     description='openai gym interface to bit flip problem described in Hindsight Experience Replay',
     author='Zach Dwiel',
     author_email='zach.dwiel@intel.com',
