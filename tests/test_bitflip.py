@@ -1,4 +1,5 @@
 import numpy as np
+import copy
 import pytest
 
 from gym_bit_flip import BitFlip
@@ -81,7 +82,32 @@ def test_mean_zero():
     bit_flip = BitFlip(mean_zero=True)
     state, _, _, _ = bit_flip.step(0)
 
-    assert 1 in state['state']
-    assert -1 in state['state']
-    assert 1 in state['goal']
-    assert -1 in state['goal']
+    assert 1 in state["state"]
+    assert -1 in state["state"]
+    assert 1 in state["goal"]
+    assert -1 in state["goal"]
+
+
+def test_observation_copy():
+    """
+    in many use cases, the previous observation is kept around after a step has
+    taken place so that the observation before and after the step can be
+    considered together. This test makes sure that taking a step doesn't modify
+    via side effect previously returned observations
+    """
+    bit_flip = BitFlip(2)
+
+    observation, _, _, _ = bit_flip.step(0)
+    observation_copy = copy.deepcopy(observation)
+
+    print(observation)
+    print(observation_copy)
+
+    # buggy code might result in side effects changing observation (but not the
+    # copy) here
+    bit_flip.step(0)
+
+    print(observation)
+    print(observation_copy)
+
+    np.testing.assert_array_equal(observation['state'], observation_copy['state'])

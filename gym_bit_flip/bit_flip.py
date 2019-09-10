@@ -1,3 +1,4 @@
+import copy
 import numpy as np
 import gym
 from gym import spaces
@@ -68,8 +69,8 @@ class BitFlip(gym.Env):
 
     def _get_obs(self):
         return {
-            "state": self._mean_zero(self.state),
-            "goal": self._mean_zero(self.goal),
+            "state": copy.copy(self._mean_zero(self.state)),
+            "goal": copy.copy(self._mean_zero(self.goal)),
         }
 
     def _render(self, mode="human", close=False):
